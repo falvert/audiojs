@@ -1,0 +1,32 @@
+<!doctype html>
+<html>
+  <head>
+	<title>AudioJS App</title>
+  </head>
+  
+  <body>
+	<h1>Web AudioJS Player</h1>
+	<button id="stopButton" onclick="stopPlayer();">Stop</button>
+	<script src="/socket.io/socket.io.js"></script>
+	<script>
+	  var socket = io();
+	  var audioContext= new (window.AudioContext || window.webkitAudioContext)();
+	  var startTime = 0;
+ 	  var source;
+
+	  socket.on('audio file', function(data){
+	      audioContext.decodeAudioData(data.audioBuffer, function(buffer){
+	          source = audioContext.createBufferSource();
+	          source.buffer = buffer;
+	          source.connect(audioContext.destination);
+	          source.start(startTime);
+	          
+	      });
+
+	  });
+	  
+	  function stopPlayer(){ source.stop(0);}
+
+	</script>
+  </body>
+</htlm>	
